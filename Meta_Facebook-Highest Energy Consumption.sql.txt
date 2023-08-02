@@ -1,0 +1,19 @@
+with cte1 as 
+(select * from fb_eu_energy
+union all 
+select * from fb_asia_energy
+union all
+select * from fb_na_energy),
+
+cte2 as 
+(select date, 
+sum(consumption) as consumption
+from cte1
+group by 1)
+
+select date, 
+max(consumption) as total_energy
+from cte2
+group by 1
+order by 2 desc
+limit 2;

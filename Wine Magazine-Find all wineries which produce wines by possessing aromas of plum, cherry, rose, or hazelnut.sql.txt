@@ -1,0 +1,8 @@
+select 
+distinct (winery)
+from winemag_p1
+where  description ~* 'plum\y' or
+ description ~* '\yrose\y' or
+  description ~* 'hazelnut\y' or
+ description ~* 'cherry\y'
+order by 1;

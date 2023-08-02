@@ -1,0 +1,14 @@
+WITH cte as 
+(SELECT voter, CAST((1 / COUNT(voter)) AS float) AS vote_weight
+FROM voting_results
+GROUP BY voter)
+
+SELECT candidate
+FROM voting_results v
+LEFT JOIN cte c 
+ON v.voter = c.voter
+WHERE candidate IS NOT NULL
+GROUP BY candidate
+ORDER BY SUM(vote_weight) DESC
+
+LIMIT 1;

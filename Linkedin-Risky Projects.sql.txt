@@ -1,0 +1,19 @@
+with cte1 as 
+
+(select title, 
+budget, 
+Start_date, 
+end_date, 
+salary
+from linkedin_projects as lp
+inner join linkedin_emp_projects as lep on lp.id = lep.project_id
+inner join linkedin_employees as le on le.id = lep.emp_id)
+
+select * from 
+(select title,
+budget,
+ceiling(sum(salary * ((end_date - start_date)::float/365))) as prorated_salary
+from cte1
+group by title, budget
+order by title asc) a
+where budget < prorated_salary

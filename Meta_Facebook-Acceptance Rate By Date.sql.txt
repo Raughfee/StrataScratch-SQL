@@ -1,0 +1,14 @@
+with cte1 as 
+(select 
+date, 
+action,
+lead(action) over (partition by user_id_sender, user_id_receiver order by date) as status
+from fb_friend_requests
+
+order by date asc)
+
+select date,
+count(status) * 1.0/count(action) as percentage_acceptance
+from cte1
+where action = 'sent'
+group by date;

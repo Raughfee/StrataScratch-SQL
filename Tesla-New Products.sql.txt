@@ -1,0 +1,15 @@
+with cte1 as 
+(select count(distinct product_name),
+year, 
+company_name,
+
+lag(count(distinct product_name)) over (partition by company_name )
+from car_launches
+group by year, 
+company_name
+order by company_name, 
+year asc)
+select company_name,
+(count - lag) as net_products
+from cte1
+where year = 2020;

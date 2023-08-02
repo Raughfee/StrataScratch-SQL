@@ -1,0 +1,10 @@
+with cte1 as 
+(select  department, first_name as employee_name,
+salary,
+rank () over (partition by department order by salary desc ) as ranking
+
+from employee)
+select department, employee_name,
+salary from cte1 
+where ranking = 1
+order by salary desc;

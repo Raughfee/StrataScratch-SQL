@@ -1,0 +1,14 @@
+with cte1 as 
+(select 
+distinct type,
+processed,
+count(*) as total 
+from facebook_complaints
+group by 1,2)
+
+
+select distinct type,
+sum(total)/ (select sum(total) from cte1 where type = 0) as processed_rate
+from cte1 
+where processed =  'TRUE'
+group by 1;

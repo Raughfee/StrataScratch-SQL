@@ -1,0 +1,6 @@
+select distinct business_name,
+case when LOWER(business_name)  like any(array['%restaurant%']) then 'restaurant'
+     when LOWER(business_name)  like any(array['%cafe%', '%café%','%coffee%'])  then 'cafe'
+     
+     when business_name  ilike any(array['%school%']) then 'school' else 'other' end as Business_type
+from sf_restaurant_health_violations;

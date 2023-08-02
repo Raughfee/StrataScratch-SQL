@@ -1,0 +1,15 @@
+with cte1 as 
+
+(select state,
+count  (stars) as n_businesses,
+dense_rank() over (order by state asc)
+
+from yelp_business
+where stars = 5
+group by 1)
+
+select state, 
+n_businesses
+from cte1 
+order by 2 desc
+limit 6;

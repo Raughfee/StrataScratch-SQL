@@ -1,0 +1,15 @@
+with cte1 as 
+ (select  survived,
+case 
+when pclass = 1 then 'first_class'
+when pclass = 2 then 'second_class'
+when pclass = 3 then 'third_class'
+else null end as pclass
+from titanic)
+select survived,
+count(pclass) filter (where pclass = 'first_class') as first_class,
+count(pclass) filter (where pclass = 'second_class') as second_class,
+count(pclass) filter (where pclass = 'third_class') as third_class
+from cte1
+group by 1
+order by 1 asc

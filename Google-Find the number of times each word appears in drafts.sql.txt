@@ -1,0 +1,8 @@
+select word, count(word) from (
+select 
+trim(both ',.' from lower(unnest(string_to_array(contents, ' ')))) as word
+
+from google_file_store
+where filename like 'draft%') as words
+group by word
+order by word;

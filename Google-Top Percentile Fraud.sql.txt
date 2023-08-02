@@ -1,0 +1,15 @@
+with cte1 as 
+(select policy_num, 
+state, 
+claim_cost,
+fraud_score,
+
+Ntile (100) over (partition by state order by fraud_score desc) as rank
+from fraud_score)
+
+select policy_num, 
+state, 
+claim_cost,
+fraud_score
+from cte1
+where rank <=5

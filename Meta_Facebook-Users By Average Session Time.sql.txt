@@ -1,0 +1,21 @@
+WITH cte1 AS (
+
+    SELECT user_id, timestamp::date AS date, MAX(timestamp) AS load_time
+    FROM facebook_web_log
+    WHERE action = 'page_load'
+    GROUP BY user_id, timestamp::date
+
+),
+
+cte2 AS (
+
+    SELECT user_id, timestamp::date AS date, MIN(timestamp) AS exit_time
+    FROM facebook_web_log
+    WHERE action = 'page_exit'
+    GROUP BY user_id, timestamp::date
+
+)
+
+SELECT cte1.user_id, AVG(exit_time - load_time)
+FROM cte1 JOIN cte2 ON cte1.date = cte2.date AND cte1.user_id = cte2.user_id
+GROUP BY cte1.user_id

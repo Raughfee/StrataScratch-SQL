@@ -1,0 +1,9 @@
+select distinct c.first_name,
+sum (o.total_order_cost) as total_order_cost,
+order_date
+from customers as c
+join orders as o on c.id = o.cust_id
+where o.order_date between ' 2019-02-01' and '2019-05-01'
+group by 1, 3
+order by 2 desc
+limit 1;

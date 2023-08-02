@@ -1,0 +1,7 @@
+select distinct host_id, guest_id
+
+
+
+from airbnb_hosts as ah
+inner join airbnb_guests as ag on ah.gender = ag.gender
+and ag.nationality = ah.nationality;

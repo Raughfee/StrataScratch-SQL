@@ -1,0 +1,16 @@
+with cte1 as 
+(select post_date,
+count( fp.post_keywords) filter (where fp.post_keywords like '%spam%') as spam,
+count(*) total
+
+
+
+from facebook_posts as fp
+inner join facebook_post_views as fpv on fp.post_id = fpv.post_id
+
+
+group by 1)
+
+select post_date,
+(100* spam / total) as spam_share 
+from cte1;

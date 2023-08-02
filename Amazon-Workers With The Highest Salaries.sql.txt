@@ -1,0 +1,12 @@
+with cte1 as 
+(select worker_title as job_title, 
+salary as Highest_paid_salary,
+rank() over (order by salary desc) rnk
+from worker
+join title t on worker.worker_id = t.worker_ref_id
+group by 1, 2
+order by 1 asc)
+
+select job_title 
+from cte1
+where rnk <=2;

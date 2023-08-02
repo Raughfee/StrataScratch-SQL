@@ -1,0 +1,11 @@
+select 
+d.entry_date,
+count(d.final_price) as premium_paid_accounts,
+count(case when d.final_price > 0 and d7.final_price > 0 then 1 else null end) as premium_paid_accounts_after_7d
+from premium_accounts_by_day d
+left join premium_accounts_by_day d7 on d.entry_date + interval '7 day' = d7.entry_date and d.account_id = d7.account_id
+
+where d.final_price <> 0
+group by 1
+order by 1 asc
+limit 7;

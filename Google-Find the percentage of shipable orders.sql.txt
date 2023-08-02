@@ -1,0 +1,9 @@
+with cte1 as 
+(select count(*) as rows,
+count(address) as address
+from orders as o  
+left join customers as c on o.cust_id = c.id)
+
+
+select (100 * address/rows) as percent_shipable
+from cte1;

@@ -1,0 +1,5 @@
+select 
+
+count(case when status = 'open' then 1 else null end):: decimal / count(*)
+from fb_active_users
+where country = 'USA';

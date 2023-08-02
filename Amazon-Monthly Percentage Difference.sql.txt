@@ -1,0 +1,10 @@
+select to_char(created_at::Date, 'yyyy-mm') as year_month,
+round(((sum(value) -
+lag(sum(value),1) over (order by to_char(created_at::date, 'yyyy-mm')))/(lag(sum(value),1) over (order by to_char(created_at::date, 'yyyy-mm'))))*100,2) as revenue_diff_pct
+
+
+
+
+from sf_transactions
+group by 1
+order by 1;

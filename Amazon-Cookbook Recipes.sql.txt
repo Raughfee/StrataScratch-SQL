@@ -1,0 +1,16 @@
+select (row_number() over(
+                          ORDER BY page_number/2)-1)*2 AS left_page_number,
+        string_agg(case when page_number % 2 = left_page_number % 2 or page_number <> left_page_number then (select title from cookbook_titles where page_number = left_page_number) end, ',') as left_title,
+        string_agg(case when page_number % 2 = 1 or page_number = left_page_number  then (select title from cookbook_titles where page_number = ((page_number2 *2) + 1)) end,',') as right_title
+from
+   
+   (select (row_number() over(order by page_number) - 1 ) as page_number2,
+           case when left_page_number = 1 then 0 else left_page_number  end as left_page_number,page_number, title 
+              from 
+              (select (row_number() over(
+                      ORDER BY page_number/2)-1)*2 as left_page_number,
+                      page_number,
+                      title
+
+             from cookbook_titles) a) b
+group by page_number;

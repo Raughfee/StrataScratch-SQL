@@ -1,0 +1,15 @@
+with cte1 as 
+(select employee_title, 
+sex, 
+(salary + bonus) as salary
+from sf_employee as sfe
+inner join (select worker_ref_id, sum(bonus) as bonus from sf_bonus
+group by 1) as sfb  on sfe.id = sfb.worker_ref_id
+)
+
+select employee_title,
+sex, 
+avg(salary) as com
+from cte1
+group by 1,2
+order by 1 desc;
