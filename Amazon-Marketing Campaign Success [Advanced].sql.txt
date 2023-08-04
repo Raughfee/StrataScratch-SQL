@@ -1,17 +1,9 @@
-SELECT count(DISTINCT user_id)
-FROM marketing_campaign
-WHERE user_id in
-    (SELECT user_id
-     FROM marketing_campaign
-     GROUP BY user_id
-     HAVING count(DISTINCT created_at) >1
-     AND count(DISTINCT product_id) >1)
-  AND concat((user_id),'_', (product_id)) not in
-    (SELECT user_product
-     FROM
-       (SELECT *,
-               rank() over(PARTITION BY user_id
-                           ORDER BY created_at) AS rn,
-               concat((user_id),'_', (product_id)) AS user_product
-        FROM marketing_campaign) x
-     WHERE rn = 1 )
+select count(distinct a.user_id) from (select user_id,
+case when min(created_at) over (partition by user_id) <>  min(created_at) over (partition by user_id, product_id)
+                                    
+                                      then 1 else 0 end as date
+from marketing_campaign
+
+group by user_id,created_at,product_id
+order by user_id) a 
+where date = 1;
