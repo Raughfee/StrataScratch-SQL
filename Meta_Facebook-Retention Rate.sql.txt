@@ -1,0 +1,16 @@
+with dec_ret as 
+(select distinct account_id, user_id
+from sf_events
+where date_trunc('month', date ) > '2020-12-01' and user_id in (select distinct user_id from sf_events where date_trunc('month', date) = '2020-12-01')),
+
+ jan_ret as (select distinct account_id, user_id
+from sf_events
+where date_trunc('month', date) > '2021-01-01' and user_id in
+    (select distinct user_id from sf_events where date_trunc('month', date) = '2021-01-01'))
+    
+select dr.account_id, count(jr.user_id)/count(dr.user_id) retantion
+from dec_ret dr
+left join jan_ret jr
+on dr.account_id = jr.account_id
+group by 1
+order by 1;
